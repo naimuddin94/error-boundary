@@ -1,12 +1,18 @@
+"use client"
+
 import { Component, ReactNode } from "react";
 
-interface ErrorBoundaryProps{
-    props: ReactNode;
-    children: ReactNode;
+interface ErrorBoundaryProps {
+  fallback: ReactNode;
+  children: ReactNode;
 }
 
-class ErrorBoundary extends Component<ErrorBoundaryProps> {
-  constructor(props: ReactNode) {
+interface ErrorBoundaryState {
+  hasError: Boolean;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
       hasError: false,
@@ -17,7 +23,10 @@ class ErrorBoundary extends Component<ErrorBoundaryProps> {
     return { hasError: true };
   }
 
-  render() {
+  render(): ReactNode {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
     return this.props.children;
   }
 }
